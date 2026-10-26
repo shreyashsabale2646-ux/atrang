@@ -43,3 +43,8 @@ next-env.d.ts
 
 # source audio supplied for processing (processed copies live in public/audio)
 /*.mp3
+
+# backend
+backend/target/
+.mvn/
+
