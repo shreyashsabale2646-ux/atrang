@@ -9,6 +9,8 @@ import { isTypingTarget } from "@/lib/utils";
 import { toggleMusic } from "../ui/MusicToggle";
 import { toggleSound } from "../ui/SoundToggle";
 
+import { AuthProvider } from "@/context/AuthContext";
+
 /** App-wide client behaviour: motion preference, background music, global hotkeys. */
 export function AppProviders({ children }: { children: ReactNode }) {
   const { motion, music, volume } = useSettings();
@@ -35,5 +37,9 @@ export function AppProviders({ children }: { children: ReactNode }) {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  return <MotionConfig reducedMotion={reduced ? "always" : "never"}>{children}</MotionConfig>;
+  return (
+    <MotionConfig reducedMotion={reduced ? "always" : "never"}>
+      <AuthProvider>{children}</AuthProvider>
+    </MotionConfig>
+  );
 }
