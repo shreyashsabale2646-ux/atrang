@@ -1,6 +1,8 @@
 package in.ac.iiitt.atrang.dto;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventSummaryDto {
     private Long id;
@@ -23,6 +25,11 @@ public class EventSummaryDto {
     private Integer displayOrder;
     private Integer sessionCount;
     private OffsetDateTime createdAt;
+
+    private List<ScheduleSlotDto> schedule = new ArrayList<>();
+    private List<String> highlights = new ArrayList<>();
+    private List<String> rules = new ArrayList<>();
+    private List<CoordinatorDto> coordinators = new ArrayList<>();
 
     public EventSummaryDto() {}
 
@@ -66,4 +73,16 @@ public class EventSummaryDto {
     public void setSessionCount(Integer sessionCount) { this.sessionCount = sessionCount; }
     public OffsetDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
+
+    public List<ScheduleSlotDto> getSchedule() { return schedule; }
+    public void setSchedule(List<ScheduleSlotDto> schedule) { this.schedule = schedule; }
+
+    public List<String> getHighlights() { return highlights; }
+    public void setHighlights(List<String> highlights) { this.highlights = highlights; }
+
+    public List<String> getRules() { return rules; }
+    public void setRules(List<String> rules) { this.rules = rules; }
+
+    public List<CoordinatorDto> getCoordinators() { return coordinators; }
+    public void setCoordinators(List<CoordinatorDto> coordinators) { this.coordinators = coordinators; }
 }

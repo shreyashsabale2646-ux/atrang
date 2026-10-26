@@ -8,7 +8,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Only guarantees that the configured admin account exists. Events, categories, and fest days
+ * are never seeded here; they are created and removed by admins through the admin API.
+ */
 @Component
 public class DataInitializer implements CommandLineRunner {
 
@@ -29,9 +34,10 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     @Override
+    @Transactional
     public void run(String... args) {
         if (!adminUserRepository.existsByUsername(defaultUsername)) {
-            log.info("No default admin user found. Creating initial admin: {}", defaultUsername);
+            log.info("Creating initial admin user: {}", defaultUsername);
             AdminUser admin = new AdminUser(
                     defaultUsername,
                     passwordEncoder.encode(defaultPassword),
@@ -40,13 +46,10 @@ public class DataInitializer implements CommandLineRunner {
                     "ROLE_SUPERADMIN"
             );
             adminUserRepository.save(admin);
-            log.info("Default administrator created successfully.");
         } else {
-            // Update admin password hash to match current configured password
             adminUserRepository.findByUsername(defaultUsername).ifPresent(admin -> {
                 admin.setPasswordHash(passwordEncoder.encode(defaultPassword));
                 adminUserRepository.save(admin);
-                log.info("Verified administrative credentials for '{}'", defaultUsername);
             });
         }
     }

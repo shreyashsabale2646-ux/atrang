@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventCreateRequest {
+public class EventCreateRequest implements EventPayload {
 
     @NotNull(message = "Category ID is required")
     private Long categoryId;
@@ -30,7 +30,7 @@ public class EventCreateRequest {
     @NotBlank(message = "Description is required")
     private String description;
 
-    private String organizer = "Atrang Technical Committee";
+    private String organizer;
 
     @Pattern(regexp = "^(Individual|Team|Individual or Team)$", message = "Participation must be 'Individual', 'Team', or 'Individual or Team'")
     private String participation = "Individual";
@@ -42,8 +42,8 @@ public class EventCreateRequest {
     @NotBlank(message = "Venue is required")
     private String venue;
 
-    private String eligibility = "Open to all college students";
-    private String fee = "Free";
+    private String eligibility;
+    private String fee;
     private String registrationUrl;
     private OffsetDateTime registrationDeadline;
     private Boolean isPublished = false;
@@ -52,7 +52,18 @@ public class EventCreateRequest {
     @Valid
     private List<EventSessionRequest> sessions = new ArrayList<>();
 
+    private List<String> highlights = new ArrayList<>();
+    private List<String> rules = new ArrayList<>();
+    private List<CoordinatorDto> coordinators = new ArrayList<>();
+
     public EventCreateRequest() {}
+
+    public List<String> getHighlights() { return highlights; }
+    public void setHighlights(List<String> highlights) { this.highlights = highlights; }
+    public List<String> getRules() { return rules; }
+    public void setRules(List<String> rules) { this.rules = rules; }
+    public List<CoordinatorDto> getCoordinators() { return coordinators; }
+    public void setCoordinators(List<CoordinatorDto> coordinators) { this.coordinators = coordinators; }
 
     public Long getCategoryId() { return categoryId; }
     public void setCategoryId(Long categoryId) { this.categoryId = categoryId; }

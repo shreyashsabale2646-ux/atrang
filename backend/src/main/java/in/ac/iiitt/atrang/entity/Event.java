@@ -1,13 +1,20 @@
 package in.ac.iiitt.atrang.entity;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import in.ac.iiitt.atrang.dto.CoordinatorDto;
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "events")
 public class Event {
+
+    private static final ObjectMapper MAPPER = new ObjectMapper().findAndRegisterModules();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +37,7 @@ public class Event {
     private String description;
 
     @Column(nullable = false, length = 100)
-    private String organizer = "Atrang Technical Committee";
+    private String organizer = "";
 
     @Column(nullable = false, length = 30)
     private String participation = "Individual";
@@ -48,10 +55,10 @@ public class Event {
     private String venue;
 
     @Column(length = 150)
-    private String eligibility = "Open to all college students";
+    private String eligibility;
 
     @Column(length = 50)
-    private String fee = "Free";
+    private String fee;
 
     @Column(name = "registration_url", columnDefinition = "TEXT")
     private String registrationUrl;
@@ -64,6 +71,15 @@ public class Event {
 
     @Column(name = "display_order", nullable = false)
     private Integer displayOrder = 0;
+
+    @Column(columnDefinition = "TEXT")
+    private String highlights;
+
+    @Column(columnDefinition = "TEXT")
+    private String rules;
+
+    @Column(columnDefinition = "TEXT")
+    private String coordinators;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt = OffsetDateTime.now();
@@ -80,6 +96,60 @@ public class Event {
     @PreUpdate
     public void preUpdate() {
         this.updatedAt = OffsetDateTime.now();
+    }
+
+    public List<String> getHighlightsList() {
+        if (highlights == null || highlights.trim().isEmpty()) return new ArrayList<>();
+        try {
+            return MAPPER.readValue(highlights, new TypeReference<List<String>>() {});
+        } catch (Exception e) {
+            return Arrays.stream(highlights.split("\n")).map(String::trim).filter(s -> !s.isEmpty()).collect(Collectors.toList());
+        }
+    }
+
+    public void setHighlightsList(List<String> list) {
+        if (list == null) { this.highlights = null; return; }
+        try {
+            this.highlights = MAPPER.writeValueAsString(list);
+        } catch (Exception e) {
+            this.highlights = String.join("\n", list);
+        }
+    }
+
+    public List<String> getRulesList() {
+        if (rules == null || rules.trim().isEmpty()) return new ArrayList<>();
+        try {
+            return MAPPER.readValue(rules, new TypeReference<List<String>>() {});
+        } catch (Exception e) {
+            return Arrays.stream(rules.split("\n")).map(String::trim).filter(s -> !s.isEmpty()).collect(Collectors.toList());
+        }
+    }
+
+    public void setRulesList(List<String> list) {
+        if (list == null) { this.rules = null; return; }
+        try {
+            this.rules = MAPPER.writeValueAsString(list);
+        } catch (Exception e) {
+            this.rules = String.join("\n", list);
+        }
+    }
+
+    public List<CoordinatorDto> getCoordinatorsList() {
+        if (coordinators == null || coordinators.trim().isEmpty()) return new ArrayList<>();
+        try {
+            return MAPPER.readValue(coordinators, new TypeReference<List<CoordinatorDto>>() {});
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public void setCoordinatorsList(List<CoordinatorDto> list) {
+        if (list == null) { this.coordinators = null; return; }
+        try {
+            this.coordinators = MAPPER.writeValueAsString(list);
+        } catch (Exception e) {
+            this.coordinators = null;
+        }
     }
 
     public Long getId() { return id; }
@@ -135,6 +205,15 @@ public class Event {
 
     public Integer getDisplayOrder() { return displayOrder; }
     public void setDisplayOrder(Integer displayOrder) { this.displayOrder = displayOrder; }
+
+    public String getHighlights() { return highlights; }
+    public void setHighlights(String highlights) { this.highlights = highlights; }
+
+    public String getRules() { return rules; }
+    public void setRules(String rules) { this.rules = rules; }
+
+    public String getCoordinators() { return coordinators; }
+    public void setCoordinators(String coordinators) { this.coordinators = coordinators; }
 
     public OffsetDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }

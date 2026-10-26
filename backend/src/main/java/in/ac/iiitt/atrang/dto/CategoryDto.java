@@ -7,6 +7,7 @@ public class CategoryDto {
     private String code;
     private String name;
     private String description;
+    private String biomeName;
     private String colorHex;
     private String iconName;
     private Integer displayOrder;
@@ -24,6 +25,8 @@ public class CategoryDto {
     public void setName(String name) { this.name = name; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+    public String getBiomeName() { return biomeName; }
+    public void setBiomeName(String biomeName) { this.biomeName = biomeName; }
     public String getColorHex() { return colorHex; }
     public void setColorHex(String colorHex) { this.colorHex = colorHex; }
     public String getIconName() { return iconName; }

@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventUpdateRequest {
+public class EventUpdateRequest implements EventPayload {
 
     @NotNull(message = "Category ID is required")
     private Long categoryId;
@@ -52,7 +52,18 @@ public class EventUpdateRequest {
     @Valid
     private List<EventSessionRequest> sessions = new ArrayList<>();
 
+    private List<String> highlights = new ArrayList<>();
+    private List<String> rules = new ArrayList<>();
+    private List<CoordinatorDto> coordinators = new ArrayList<>();
+
     public EventUpdateRequest() {}
+
+    public List<String> getHighlights() { return highlights; }
+    public void setHighlights(List<String> highlights) { this.highlights = highlights; }
+    public List<String> getRules() { return rules; }
+    public void setRules(List<String> rules) { this.rules = rules; }
+    public List<CoordinatorDto> getCoordinators() { return coordinators; }
+    public void setCoordinators(List<CoordinatorDto> coordinators) { this.coordinators = coordinators; }
 
     public Long getCategoryId() { return categoryId; }
     public void setCategoryId(Long categoryId) { this.categoryId = categoryId; }

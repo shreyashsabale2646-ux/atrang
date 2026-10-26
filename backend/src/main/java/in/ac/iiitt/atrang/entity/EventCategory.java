@@ -22,6 +22,9 @@ public class EventCategory {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "biome_name", length = 100)
+    private String biomeName;
+
     @Column(name = "color_hex", nullable = false, length = 7)
     private String colorHex = "#a46bff";
 
@@ -73,6 +76,9 @@ public class EventCategory {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public String getBiomeName() { return biomeName; }
+    public void setBiomeName(String biomeName) { this.biomeName = biomeName; }
 
     public String getColorHex() { return colorHex; }
     public void setColorHex(String colorHex) { this.colorHex = colorHex; }

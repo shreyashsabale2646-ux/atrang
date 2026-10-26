@@ -12,6 +12,9 @@ public class CategoryUpdateRequest {
 
     private String description;
 
+    @Size(max = 100, message = "Biome name cannot exceed 100 characters")
+    private String biomeName;
+
     @Pattern(regexp = "^#[0-9A-Fa-f]{6}$", message = "Color must be a valid 6-digit hex code")
     private String colorHex;
 
@@ -28,6 +31,9 @@ public class CategoryUpdateRequest {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public String getBiomeName() { return biomeName; }
+    public void setBiomeName(String biomeName) { this.biomeName = biomeName; }
 
     public String getColorHex() { return colorHex; }
     public void setColorHex(String colorHex) { this.colorHex = colorHex; }

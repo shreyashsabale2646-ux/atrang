@@ -68,6 +68,7 @@ public class CategoryService {
                 req.getIconName(),
                 req.getDisplayOrder()
         );
+        cat.setBiomeName(blankToNull(req.getBiomeName()));
 
         EventCategory saved = categoryRepository.save(cat);
         auditService.log(null, null, "CREATE", "Created category: " + saved.getName(), performer, null);
@@ -85,6 +86,7 @@ public class CategoryService {
 
         cat.setName(req.getName().trim());
         if (req.getDescription() != null) cat.setDescription(req.getDescription());
+        if (req.getBiomeName() != null) cat.setBiomeName(blankToNull(req.getBiomeName()));
         if (req.getColorHex() != null) cat.setColorHex(req.getColorHex());
         if (req.getIconName() != null) cat.setIconName(req.getIconName());
         if (req.getDisplayOrder() != null) cat.setDisplayOrder(req.getDisplayOrder());
@@ -109,12 +111,17 @@ public class CategoryService {
         auditService.log(null, null, "DELETE", "Deleted category: " + cat.getName(), performer, null);
     }
 
+    private static String blankToNull(String value) {
+        return value == null || value.isBlank() ? null : value.trim();
+    }
+
     private CategoryDto mapToDto(EventCategory cat) {
         CategoryDto dto = new CategoryDto();
         dto.setId(cat.getId());
         dto.setCode(cat.getCode());
         dto.setName(cat.getName());
         dto.setDescription(cat.getDescription());
+        dto.setBiomeName(cat.getBiomeName());
         dto.setColorHex(cat.getColorHex());
         dto.setIconName(cat.getIconName());
         dto.setDisplayOrder(cat.getDisplayOrder());

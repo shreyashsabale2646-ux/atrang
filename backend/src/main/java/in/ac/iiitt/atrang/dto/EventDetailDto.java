@@ -29,7 +29,12 @@ public class EventDetailDto {
     private Integer displayOrder;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
+
     private List<EventSessionDto> sessions = new ArrayList<>();
+    private List<ScheduleSlotDto> schedule = new ArrayList<>();
+    private List<String> highlights = new ArrayList<>();
+    private List<String> rules = new ArrayList<>();
+    private List<CoordinatorDto> coordinators = new ArrayList<>();
 
     public EventDetailDto() {}
 
@@ -81,6 +86,19 @@ public class EventDetailDto {
     public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
     public OffsetDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(OffsetDateTime updatedAt) { this.updatedAt = updatedAt; }
+
     public List<EventSessionDto> getSessions() { return sessions; }
     public void setSessions(List<EventSessionDto> sessions) { this.sessions = sessions; }
+
+    public List<ScheduleSlotDto> getSchedule() { return schedule; }
+    public void setSchedule(List<ScheduleSlotDto> schedule) { this.schedule = schedule; }
+
+    public List<String> getHighlights() { return highlights; }
+    public void setHighlights(List<String> highlights) { this.highlights = highlights; }
+
+    public List<String> getRules() { return rules; }
+    public void setRules(List<String> rules) { this.rules = rules; }
+
+    public List<CoordinatorDto> getCoordinators() { return coordinators; }
+    public void setCoordinators(List<CoordinatorDto> coordinators) { this.coordinators = coordinators; }
 }

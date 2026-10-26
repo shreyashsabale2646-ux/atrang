@@ -14,7 +14,6 @@ public class EventSessionRequest {
     @NotBlank(message = "Start time is required")
     private String startTime;
 
-    @NotBlank(message = "End time is required")
     private String endTime;
 
     @NotBlank(message = "Session title is required")
