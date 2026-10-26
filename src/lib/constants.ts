@@ -13,11 +13,12 @@ export const FEST = {
 /** Set NEXT_PUBLIC_SITE_URL to the deployed origin so social previews resolve absolute URLs. */
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
-export type NavItem = { label: string; href: "/" | "/events" };
+export type NavItem = { label: string; href: "/" | "/events" | "/admin" };
 
 export const NAV_ITEMS: readonly NavItem[] = [
   { label: "Home", href: "/" },
   { label: "Events", href: "/events" },
+  { label: "Admin", href: "/admin" },
 ];
 
 /** Rotating splash lines shown beside the logo on the home menu. */

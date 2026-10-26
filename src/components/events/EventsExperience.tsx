@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useEventFilters } from "@/hooks/useEventFilters";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { EVENTS, type EventCategory, type FestEvent } from "@/data/events";
+import { EVENTS, BIOMES, type EventCategory, type FestEvent } from "@/data/events";
+import { api } from "@/lib/api";
 import { PixelHeading } from "../branding/PixelHeading";
 import { EmptyEventsState } from "./EmptyEventsState";
 import { EventDetailsModal } from "./EventDetailsModal";
@@ -13,7 +14,51 @@ import { EventsHero } from "./EventsHero";
 
 /** Client island for the events page: owns filter state and the selected event. */
 export function EventsExperience() {
-  const filters = useEventFilters(EVENTS);
+  const [eventList, setEventList] = useState<FestEvent[]>(EVENTS as FestEvent[]);
+
+  // Connect to Spring Boot backend to retrieve live events from PostgreSQL
+  useEffect(() => {
+    let mounted = true;
+    api
+      .getPublicEvents()
+      .then((backendEvents) => {
+        if (!mounted || !backendEvents || backendEvents.length === 0) return;
+        const validCategories = Object.keys(BIOMES) as EventCategory[];
+        const mapped: FestEvent[] = backendEvents.map((be) => {
+          // Match category or default to Coding
+          const matchedCategory =
+            validCategories.find(
+              (c) =>
+                c.toLowerCase() === be.categoryName.toLowerCase() ||
+                c.toLowerCase() === be.categoryCode.toLowerCase(),
+            ) || "Coding";
+
+          return {
+            id: be.slug,
+            title: be.title,
+            summary: be.summary,
+            description: be.summary,
+            category: matchedCategory,
+            venue: be.venue,
+            prize: be.prize,
+            teamSize: be.teamSize,
+            duration: be.duration,
+            registrationUrl: be.registrationUrl,
+            participation: (be.participation as any) || "Individual",
+            color: be.categoryColor,
+          };
+        });
+        setEventList(mapped);
+      })
+      .catch(() => {
+        // If backend is not currently running, keep fallback sample events
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const filters = useEventFilters(eventList);
   const [selected, setSelected] = useState<FestEvent | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const reduced = useReducedMotion();
@@ -38,7 +83,7 @@ export function EventsExperience() {
 
   return (
     <>
-      <EventsHero eventCount={EVENTS.length} onPickCategory={pickCategory} />
+      <EventsHero eventCount={eventList.length} onPickCategory={pickCategory} />
 
       <section
         id="events"
@@ -56,7 +101,7 @@ export function EventsExperience() {
             onCategoryChange={filters.setCategory}
             counts={filters.counts}
             resultCount={filters.results.length}
-            total={EVENTS.length}
+            total={eventList.length}
           />
           {filters.results.length > 0 ? (
             <EventGrid events={filters.results} onSelect={openDetails} />
